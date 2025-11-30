@@ -31,6 +31,20 @@ def show_menu():
     print("4. Delete product")
     print("5. Search product")
     print("6. Save and exit")
+def show_inventory(inventory):
+    """
+    Display all products in the inventory in a formatted way.
+    """
+    if not inventory:
+        print("\nInventory is empty.")
+        return
+
+    print("\n=== Current Inventory ===")
+    for item in inventory:
+        print(
+            f"ID: {item['id']} | Name: {item['name']} | "
+            f"Quantity: {item['quantity']} | Price: €{item['price']}"
+        )
 
 def main():
     inventory = load_data()
@@ -43,7 +57,7 @@ def main():
         choice = input("Choose an option (1-6): ").strip()
 
         if choice == "1":
-            print("TODO: Show inventory")
+            show_inventory(inventory)
         elif choice == "2":
             print("TODO: Add product")
         elif choice == "3":
@@ -58,6 +72,7 @@ def main():
             break
         else:
             print("Invalid option, please choose a number between 1 and 6.")
+
 if __name__ == "__main__":
     main()
 
