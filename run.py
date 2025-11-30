@@ -136,6 +136,37 @@ def update_product(inventory):
 
     except ValueError:
         print("Invalid value! Quantity must be integer and price must be a number.")
+def delete_product(inventory):
+    """
+    Delete a product from the inventory by its ID.
+    """
+    if not inventory:
+        print("\nInventory is empty. Nothing to delete.")
+        return
+
+    print("\n=== Delete Product ===")
+    try:
+        product_id = int(input("Enter product ID to delete: ").strip())
+    except ValueError:
+        print("Invalid ID! ID must be an integer.")
+        return
+
+    # Search for the product
+    product = next((item for item in inventory if item["id"] == product_id), None)
+
+    if not product:
+        print(f"No product found with ID {product_id}.")
+        return
+
+    print(f"You are about to delete: {product['name']} "
+          f"(Qty: {product['quantity']}, Price: €{product['price']})")
+    confirm = input("Are you sure? (y/n): ").strip().lower()
+
+    if confirm == "y":
+        inventory.remove(product)
+        print("Product deleted successfully!")
+    else:
+        print("Delete cancelled.")
 
 def main():
     inventory = load_data()
@@ -154,7 +185,7 @@ def main():
         elif choice == "3":
             update_product(inventory)
         elif choice == "4":
-            print("TODO: Delete product")
+            delete_product(inventory)
         elif choice == "5":
             print("TODO: Search product")
         elif choice == "6":
