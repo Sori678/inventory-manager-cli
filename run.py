@@ -82,6 +82,60 @@ def add_product(inventory):
 
     inventory.append(new_product)
     print(f"Product '{name}' added successfully with ID {new_id}!")
+def update_product(inventory):
+    """
+    Update quantity and/or price for an existing product.
+    """
+    if not inventory:
+        print("\nInventory is empty. Nothing to update.")
+        return
+
+    print("\n=== Update Product ===")
+    try:
+        product_id = int(input("Enter product ID to update: ").strip())
+    except ValueError:
+        print("Invalid ID! ID must be an integer.")
+        return
+
+    # Search for the product
+    product = next((item for item in inventory if item["id"] == product_id), None)
+
+    if not product:
+        print(f"No product found with ID {product_id}.")
+        return
+
+    print(f"Current product: {product['name']} | "
+          f"Quantity: {product['quantity']} | Price: €{product['price']}")
+
+    # New quantity if the user wants
+    new_quantity_input = input(
+        "New quantity (leave blank to keep current): "
+    ).strip()
+
+   # New price if the user wants
+    new_price_input = input(
+        "New price (leave blank to keep current): "
+    ).strip()
+
+    try:
+        if new_quantity_input:
+            new_quantity = int(new_quantity_input)
+            if new_quantity < 0:
+                print("Quantity must be positive.")
+                return
+            product["quantity"] = new_quantity
+
+        if new_price_input:
+            new_price = float(new_price_input)
+            if new_price < 0:
+                print("Price must be positive.")
+                return
+            product["price"] = new_price
+
+        print("Product updated successfully!")
+
+    except ValueError:
+        print("Invalid value! Quantity must be integer and price must be a number.")
 
 def main():
     inventory = load_data()
@@ -98,7 +152,7 @@ def main():
         elif choice == "2":
             add_product(inventory)
         elif choice == "3":
-            print("TODO: Update product")
+            update_product(inventory)
         elif choice == "4":
             print("TODO: Delete product")
         elif choice == "5":
