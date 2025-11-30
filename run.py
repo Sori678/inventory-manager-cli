@@ -1,10 +1,3 @@
-def main():
-    print("Welcome to Inventory Manager CLI!")
-    print("The program is running correctly.")
-
-if __name__ == "__main__":
-    main()
-
 import json
 
 # Load data from JSON file
@@ -27,3 +20,15 @@ def save_data(data):
         print("Database saved successfully!")
     except Exception as e:
         print(f"Error saving database: {e}")
+
+def main():
+    inventory = load_data()
+
+    print("Welcome to Inventory Manager CLI!")
+    print(f"Loaded {len(inventory)} products from database.")
+
+    # Test saving the DB
+    save_data(inventory)
+
+if __name__ == "__main__":
+    main()
