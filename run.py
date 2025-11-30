@@ -20,6 +20,17 @@ def save_data(data):
         print("Database saved successfully!")
     except Exception as e:
         print(f"Error saving database: {e}")
+def show_menu():
+    """
+    Display the main menu options for the inventory manager.
+    """
+    print("\n=== Inventory Manager ===")
+    print("1. Show inventory")
+    print("2. Add product")
+    print("3. Update product")
+    print("4. Delete product")
+    print("5. Search product")
+    print("6. Save and exit")
 
 def main():
     inventory = load_data()
@@ -27,8 +38,26 @@ def main():
     print("Welcome to Inventory Manager CLI!")
     print(f"Loaded {len(inventory)} products from database.")
 
-    # Test saving the DB
-    save_data(inventory)
+    while True:
+        show_menu()
+        choice = input("Choose an option (1-6): ").strip()
 
+        if choice == "1":
+            print("TODO: Show inventory")
+        elif choice == "2":
+            print("TODO: Add product")
+        elif choice == "3":
+            print("TODO: Update product")
+        elif choice == "4":
+            print("TODO: Delete product")
+        elif choice == "5":
+            print("TODO: Search product")
+        elif choice == "6":
+            save_data(inventory)
+            print("Database saved. Goodbye!")
+            break
+        else:
+            print("Invalid option, please choose a number between 1 and 6.")
 if __name__ == "__main__":
     main()
+
