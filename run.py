@@ -1,5 +1,5 @@
 import json
-
+import csv
 # Load data from JSON file
 def load_data():
     try:
@@ -31,7 +31,8 @@ def show_menu():
     print("4. Delete product")
     print("5. Search product")
     print("6. Export inventory to CSV")
-    print("7. Save and exit")
+    print("7. Import inventory from CSV")
+    print("8. Save and exit")
 def show_inventory(inventory):
     """
     Display all products in the inventory in a formatted way.
@@ -197,7 +198,7 @@ def search_product(inventory):
     for item in results:
         print(f"ID: {item['id']} | Name: {item['name']} | "
               f"Quantity: {item['quantity']} | Price: €{item['price']}")
-import csv
+
 
 def export_to_csv(inventory):
     """
@@ -226,6 +227,54 @@ def export_to_csv(inventory):
 
     except Exception as e:
         print(f"Error exporting CSV: {e}")
+def import_from_csv(inventory):
+    """
+    Import products from a CSV file and add them to the inventory.
+    Expected columns: ID, Name, Quantity, Price
+    """
+    filename = "inventory_import.csv"
+    print(f"\nAttempting to import from '{filename}'...")
+
+    try:
+        with open(filename, "r", encoding="utf-8") as file:
+            reader = csv.DictReader(file)
+
+            imported_count = 0
+            for row in reader:
+                try:
+                    name = row["Name"].strip()
+                    quantity = int(row["Quantity"])
+                    price = float(row["Price"])
+
+                    if not name or quantity < 0 or price < 0:
+                        print(f"Skipping invalid row: {row}")
+                        continue
+
+                    # Generate new ID
+                    if inventory:
+                        new_id = max(item["id"] for item in inventory) + 1
+                    else:
+                        new_id = 1
+
+                    new_product = {
+                        "id": new_id,
+                        "name": name,
+                        "quantity": quantity,
+                        "price": price,
+                    }
+                    inventory.append(new_product)
+                    imported_count += 1
+
+                except (KeyError, ValueError):
+                    print(f"Skipping invalid row: {row}")
+                    continue
+
+        print(f"Imported {imported_count} product(s) from CSV.")
+
+    except FileNotFoundError:
+        print(f"File '{filename}' not found. Create it before importing.")
+    except Exception as e:
+        print(f"Error importing CSV: {e}")
 
 def main():
     inventory = load_data()
@@ -250,11 +299,13 @@ def main():
         elif choice == "6":
             export_to_csv(inventory)
         elif choice == "7":
+            import_from_csv(inventory)
+        elif choice == "8":
             save_data(inventory)
             print("Database saved. Goodbye!")
             break
         else:
-            print("Invalid option, please choose a number between 1 and 6.")
+            print("Invalid option, please choose a number between 1 and 8.")
 
 if __name__ == "__main__":
     main()
