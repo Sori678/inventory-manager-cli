@@ -1,7 +1,11 @@
 import json
 import csv
-# Load data from JSON file
+
+
 def load_data():
+    """
+    Load inventory data from a JSON file.
+    """
     try:
         with open("inventory.json", "r") as file:
             return json.load(file)
@@ -12,14 +16,19 @@ def load_data():
         print("Error reading database file. Starting with empty data.")
         return []
 
-# Save data to JSON file
+
 def save_data(data):
+    """
+    Save inventory data to a JSON file.
+    """
     try:
         with open("inventory.json", "w") as file:
             json.dump(data, file, indent=4)
         print("Database saved successfully!")
     except Exception as e:
         print(f"Error saving database: {e}")
+
+
 def show_menu():
     """
     Display the main menu options for the inventory manager.
@@ -33,6 +42,8 @@ def show_menu():
     print("6. Export inventory to CSV")
     print("7. Import inventory from CSV")
     print("8. Save and exit")
+
+
 def show_inventory(inventory):
     """
     Display all products in the inventory in a formatted way.
@@ -47,6 +58,8 @@ def show_inventory(inventory):
             f"ID: {item['id']} | Name: {item['name']} | "
             f"Quantity: {item['quantity']} | Price: €{item['price']}"
         )
+
+
 def add_product(inventory):
     """
     Add a new product to the inventory with validated input.
@@ -62,7 +75,10 @@ def add_product(inventory):
         quantity = int(input("Quantity (integer): ").strip())
         price = float(input("Price (use . for decimals): ").strip())
     except ValueError:
-        print("Invalid input! Quantity must be an integer and price must be a number.")
+        print(
+            "Invalid input! Quantity must be an integer "
+            "and price must be a number."
+        )
         return
 
     if quantity < 0 or price < 0:
@@ -84,6 +100,8 @@ def add_product(inventory):
 
     inventory.append(new_product)
     print(f"Product '{name}' added successfully with ID {new_id}!")
+
+
 def update_product(inventory):
     """
     Update quantity and/or price for an existing product.
@@ -106,15 +124,17 @@ def update_product(inventory):
         print(f"No product found with ID {product_id}.")
         return
 
-    print(f"Current product: {product['name']} | "
-          f"Quantity: {product['quantity']} | Price: €{product['price']}")
+    print(
+        f"Current product: {product['name']} | "
+        f"Quantity: {product['quantity']} | Price: €{product['price']}"
+    )
 
     # New quantity if the user wants
     new_quantity_input = input(
         "New quantity (leave blank to keep current): "
     ).strip()
 
-   # New price if the user wants
+    # New price if the user wants
     new_price_input = input(
         "New price (leave blank to keep current): "
     ).strip()
@@ -137,7 +157,12 @@ def update_product(inventory):
         print("Product updated successfully!")
 
     except ValueError:
-        print("Invalid value! Quantity must be integer and price must be a number.")
+        print(
+            "Invalid value! Quantity must be integer and "
+            "price must be a number."
+        )
+
+
 def delete_product(inventory):
     """
     Delete a product from the inventory by its ID.
@@ -160,8 +185,10 @@ def delete_product(inventory):
         print(f"No product found with ID {product_id}.")
         return
 
-    print(f"You are about to delete: {product['name']} "
-          f"(Qty: {product['quantity']}, Price: €{product['price']})")
+    print(
+        f"You are about to delete: {product['name']} "
+        f"(Qty: {product['quantity']}, Price: €{product['price']})"
+    )
     confirm = input("Are you sure? (y/n): ").strip().lower()
 
     if confirm == "y":
@@ -169,6 +196,8 @@ def delete_product(inventory):
         print("Product deleted successfully!")
     else:
         print("Delete cancelled.")
+
+
 def search_product(inventory):
     """
     Search for products by name (case-insensitive).
@@ -196,8 +225,10 @@ def search_product(inventory):
 
     print(f"\nFound {len(results)} matching product(s):")
     for item in results:
-        print(f"ID: {item['id']} | Name: {item['name']} | "
-              f"Quantity: {item['quantity']} | Price: €{item['price']}")
+        print(
+            f"ID: {item['id']} | Name: {item['name']} | "
+            f"Quantity: {item['quantity']} | Price: €{item['price']}"
+        )
 
 
 def export_to_csv(inventory):
@@ -216,21 +247,25 @@ def export_to_csv(inventory):
             writer.writerow(["ID", "Name", "Quantity", "Price"])
 
             for item in inventory:
-                writer.writerow([
-                    item["id"],
-                    item["name"],
-                    item["quantity"],
-                    item["price"]
-                ])
+                writer.writerow(
+                    [
+                        item["id"],
+                        item["name"],
+                        item["quantity"],
+                        item["price"],
+                    ]
+                )
 
         print(f"Inventory exported successfully to '{filename}'!")
 
     except Exception as e:
         print(f"Error exporting CSV: {e}")
+
+
 def import_from_csv(inventory):
     """
     Import products from a CSV file and add them to the inventory.
-    Expected columns: ID, Name, Quantity, Price
+    Expected columns: ID, Name, Quantity, Price.
     """
     filename = "inventory_import.csv"
     print(f"\nAttempting to import from '{filename}'...")
@@ -276,7 +311,11 @@ def import_from_csv(inventory):
     except Exception as e:
         print(f"Error importing CSV: {e}")
 
+
 def main():
+    """
+    Main loop of the Inventory Manager CLI application.
+    """
     inventory = load_data()
 
     print("Welcome to Inventory Manager CLI!")
@@ -284,7 +323,7 @@ def main():
 
     while True:
         show_menu()
-        choice = input("Choose an option (1-6): ").strip()
+        choice = input("Choose an option (1-8): ").strip()
 
         if choice == "1":
             show_inventory(inventory)
@@ -307,6 +346,6 @@ def main():
         else:
             print("Invalid option, please choose a number between 1 and 8.")
 
+
 if __name__ == "__main__":
     main()
-
