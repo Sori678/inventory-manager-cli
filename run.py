@@ -45,6 +45,43 @@ def show_inventory(inventory):
             f"ID: {item['id']} | Name: {item['name']} | "
             f"Quantity: {item['quantity']} | Price: €{item['price']}"
         )
+def add_product(inventory):
+    """
+    Add a new product to the inventory with validated input.
+    """
+    print("\n=== Add New Product ===")
+    name = input("Product name: ").strip()
+
+    if not name:
+        print("Product name cannot be empty.")
+        return
+
+    try:
+        quantity = int(input("Quantity (integer): ").strip())
+        price = float(input("Price (use . for decimals): ").strip())
+    except ValueError:
+        print("Invalid input! Quantity must be an integer and price must be a number.")
+        return
+
+    if quantity < 0 or price < 0:
+        print("Quantity and price must be positive values.")
+        return
+
+    # Generate a new ID
+    if inventory:
+        new_id = max(item["id"] for item in inventory) + 1
+    else:
+        new_id = 1
+
+    new_product = {
+        "id": new_id,
+        "name": name,
+        "quantity": quantity,
+        "price": price,
+    }
+
+    inventory.append(new_product)
+    print(f"Product '{name}' added successfully with ID {new_id}!")
 
 def main():
     inventory = load_data()
@@ -59,7 +96,7 @@ def main():
         if choice == "1":
             show_inventory(inventory)
         elif choice == "2":
-            print("TODO: Add product")
+            add_product(inventory)
         elif choice == "3":
             print("TODO: Update product")
         elif choice == "4":
