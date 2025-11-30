@@ -167,6 +167,35 @@ def delete_product(inventory):
         print("Product deleted successfully!")
     else:
         print("Delete cancelled.")
+def search_product(inventory):
+    """
+    Search for products by name (case-insensitive).
+    """
+    if not inventory:
+        print("\nInventory is empty. Nothing to search.")
+        return
+
+    print("\n=== Search Product ===")
+    query = input("Enter product name to search: ").strip().lower()
+
+    if not query:
+        print("Search query cannot be empty.")
+        return
+
+    # Filter products
+    results = [
+        item for item in inventory
+        if query in item["name"].lower()
+    ]
+
+    if not results:
+        print(f"No products found matching: {query}")
+        return
+
+    print(f"\nFound {len(results)} matching product(s):")
+    for item in results:
+        print(f"ID: {item['id']} | Name: {item['name']} | "
+              f"Quantity: {item['quantity']} | Price: €{item['price']}")
 
 def main():
     inventory = load_data()
@@ -187,7 +216,7 @@ def main():
         elif choice == "4":
             delete_product(inventory)
         elif choice == "5":
-            print("TODO: Search product")
+            search_product(inventory)
         elif choice == "6":
             save_data(inventory)
             print("Database saved. Goodbye!")
