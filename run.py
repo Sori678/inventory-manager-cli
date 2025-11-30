@@ -30,7 +30,8 @@ def show_menu():
     print("3. Update product")
     print("4. Delete product")
     print("5. Search product")
-    print("6. Save and exit")
+    print("6. Export inventory to CSV")
+    print("7. Save and exit")
 def show_inventory(inventory):
     """
     Display all products in the inventory in a formatted way.
@@ -196,6 +197,35 @@ def search_product(inventory):
     for item in results:
         print(f"ID: {item['id']} | Name: {item['name']} | "
               f"Quantity: {item['quantity']} | Price: €{item['price']}")
+import csv
+
+def export_to_csv(inventory):
+    """
+    Export the current inventory to a CSV file.
+    """
+    if not inventory:
+        print("\nInventory is empty. Nothing to export.")
+        return
+
+    filename = "inventory_export.csv"
+
+    try:
+        with open(filename, "w", newline="", encoding="utf-8") as file:
+            writer = csv.writer(file)
+            writer.writerow(["ID", "Name", "Quantity", "Price"])
+
+            for item in inventory:
+                writer.writerow([
+                    item["id"],
+                    item["name"],
+                    item["quantity"],
+                    item["price"]
+                ])
+
+        print(f"Inventory exported successfully to '{filename}'!")
+
+    except Exception as e:
+        print(f"Error exporting CSV: {e}")
 
 def main():
     inventory = load_data()
@@ -218,6 +248,8 @@ def main():
         elif choice == "5":
             search_product(inventory)
         elif choice == "6":
+            export_to_csv(inventory)
+        elif choice == "7":
             save_data(inventory)
             print("Database saved. Goodbye!")
             break
